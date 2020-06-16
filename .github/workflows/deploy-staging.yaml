@@ -1,4 +1,4 @@
-name: Build and deploy to staging (digdir) when pull request is created
+name: Build and deploy to staging when pull request is created
 
 on:
   pull_request:
@@ -40,7 +40,7 @@ jobs:
             helm init --client-only
             helm repo add fdk https://informasjonsforvaltning.github.io/helm-chart/
             helm fetch --untar --untardir ./helm fdk/fdk-dataset-harvester-gui
-            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-dataset-harvester-gui:$GITHUB_SHA" -f ./helm/fdk-dataset-harvester-gui/values/staging-digdir.yaml ./helm/fdk-dataset-harvester-gui/ > ./kubectlapply.yaml
+            helm template --set DOCKER_IMAGE_NAME="eu.gcr.io/digdir-fdk-infra/fdk-dataset-harvester-gui:$GITHUB_SHA" -f ./helm/fdk-dataset-harvester-gui/values/staging.yaml ./helm/fdk-dataset-harvester-gui/ > ./kubectlapply.yaml
             chmod o+w ./kubectlapply.yaml
             cat kubectlapply.yaml
 
@@ -64,4 +64,4 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         uses: pullreminders/slack-action@master
         with:
-          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: fdk-dataset-harvester-gui deployed to digdir-staging\"}'
+          args: '{\"channel\":\"C7NTH118T\",\"text\":\"Application: fdk-dataset-harvester-gui deployed to staging\"}'
